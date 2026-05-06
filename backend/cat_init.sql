@@ -1,35 +1,36 @@
---
--- SQLiteStudio v3.4.18 Éú³ÉµÄÎÄ¼ş£¬ÖÜÈÕ 4ÔÂ 26 23:11:04 2026
---
--- ËùÓÃµÄÎÄ±¾±àÂë£ºSystem
---
 PRAGMA foreign_keys = off;
 BEGIN TRANSACTION;
 
--- ±í£ºcats
+-- è¡¨ï¼šcats
 CREATE TABLE IF NOT EXISTS cats (
-    cat_id           INTEGER PRIMARY KEY AUTOINCREMENT, -- Ã¨ßäID 
-    nickname         TEXT    NOT NULL,                  -- Ã¨ßäêÇ³Æ 
-    discovery_time   DATETIME,                          -- ·¢ÏÖÊ±¼ä 
-    latitude         REAL    NOT NULL,                  -- µØÀí×ø±ê(Î³¶È) 
-    longitude        REAL    NOT NULL,                  -- µØÀí×ø±ê(¾­¶È) 
-    appearance       TEXT,                              -- ÍâÃ²ÌØÕ÷ 
-    health_status    TEXT    CHECK(health_status IN ('½¡¿µ', 'Ğè¾ÈÖú', 'ÒÑÁìÑø')), -- ½¡¿µ×´Ì¬ 
-    is_sterilized    INTEGER DEFAULT 0,                 -- ¾øÓıÇé¿ö (0Î´, 1ÒÑ) 
-    personality      TEXT                               -- ĞÔ¸ñ 
+    cat_id          INTEGER PRIMARY KEY AUTOINCREMENT, 
+    nickname        TEXT    NOT NULL,                  
+    discovery_time  DATETIME,                          
+    latitude        REAL    NOT NULL,                  
+    longitude       REAL    NOT NULL,                  
+    appearance      TEXT,                              
+    health_status   TEXT    CHECK(health_status IN ('å¥åº·', 'éœ€æ•‘åŠ©', 'å·²é¢†å…»')), 
+    is_sterilized   INTEGER DEFAULT 0,                 
+    personality     TEXT                               
 );
 
--- ±í£ºrecords
+-- è¡¨ï¼šrecords
 CREATE TABLE IF NOT EXISTS records (
     record_id   INTEGER PRIMARY KEY AUTOINCREMENT,
-    cat_id      INTEGER REFERENCES cats (cat_id),      -- ¹ØÁªÃ¨ßä 
-    event_type  TEXT    CHECK(event_type IN ('Í¶Î¹', '¾ÈÖú')), -- ¼ÇÂ¼ÀàĞÍ [cite: 91]
-    event_time  DATETIME DEFAULT CURRENT_TIMESTAMP,    -- ¼ÇÂ¼Ê±¼ä [cite: 91]
-    description TEXT                                   -- ±¸×¢ 
+    cat_id      INTEGER REFERENCES cats (cat_id),      
+    event_type  TEXT    CHECK(event_type IN ('æŠ•å–‚', 'æ•‘åŠ©')), 
+    event_time  DATETIME DEFAULT CURRENT_TIMESTAMP,    
+    description TEXT                                   
 );
 
--- Ë÷Òı£ºidx_cat_location
+-- ç´¢å¼•ï¼šidx_cat_location
 CREATE INDEX IF NOT EXISTS idx_cat_location ON cats (latitude, longitude);
+
+-- æ’å…¥æµ‹è¯•çŒ«å’ªæ•°æ®
+INSERT INTO cats (nickname, discovery_time, latitude, longitude, appearance, health_status, is_sterilized, personality) VALUES
+('å¯å¯', '2026-04-20 10:00:00', 31.906, 118.783, 'è‹±çŸ­ç™½è“çŒ«', 'å¥åº·', 1, 'æ¸©é¡º'),
+('å¿ƒå¿ƒ', '2026-04-21 14:00:00', 31.907, 118.785, 'æ©˜çŒ«', 'éœ€æ•‘åŠ©', 0, 'è°ƒçš®'),
+('è•¾è•¾', '2026-04-22 09:00:00', 31.904, 118.786, 'ç‹¸èŠ±çŒ«', 'å·²é¢†å…»', 1, 'é«˜å†·');
 
 COMMIT TRANSACTION;
 PRAGMA foreign_keys = on;
